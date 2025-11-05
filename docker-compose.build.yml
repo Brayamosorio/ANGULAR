@@ -1,0 +1,6 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: brayam05/proyecto4-angular-js:latest

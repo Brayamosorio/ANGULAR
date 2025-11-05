@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+
+:root {
+  color-scheme: light;
+  --bg: #f8f5ff;
+  --bg-soft: #f1fbff;
+  --panel: #ffffff;
+  --ink: #2b2c3d;
+  --muted: #6c7085;
+  --border: #d9d6f2;
+  --accent: #7c3aed;
+  --accent-soft: rgba(124, 58, 237, 0.12);
+  --danger: #f87171;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Nunito', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--ink);
+  background: linear-gradient(180deg, var(--bg), var(--bg-soft));
+}

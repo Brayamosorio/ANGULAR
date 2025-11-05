@@ -1,0 +1,124 @@
+<header class="site-header">
+  <h1>TODO <small>Pastel</small></h1>
+  <p class="muted">Una experiencia suave para organizar tus pendientes.</p>
+</header>
+
+<main class="container">
+  <section class="card">
+    <h2>Crear</h2>
+    <form #form="ngForm" (ngSubmit)="create(form)" autocomplete="off" id="form-new">
+      <div class="grid-2">
+        <label class="field">
+          <span>Titulo</span>
+          <input
+            id="new-title"
+            name="title"
+            [(ngModel)]="newTodo.title"
+            required
+            placeholder="Ej: Llamar al cliente"
+            [disabled]="loading()"
+          />
+        </label>
+        <label class="field">
+          <span>Descripcion</span>
+          <input
+            id="new-desc"
+            name="description"
+            [(ngModel)]="newTodo.description"
+            placeholder="Opcional"
+            [disabled]="loading()"
+          />
+        </label>
+      </div>
+      <button class="btn primary" [disabled]="loading()">Agregar</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Tareas</h2>
+      <button
+        id="btn-reload"
+        class="btn subtle"
+        type="button"
+        (click)="reload()"
+        [disabled]="loading()"
+      >
+        Actualizar
+      </button>
+    </div>
+
+    <p *ngIf="loading()" class="status">Cargando tareas...</p>
+    <p *ngIf="error()" class="error" role="alert">
+      {{ error() }}
+    </p>
+
+    <ul id="list" class="todo-list" aria-live="polite">
+      <li
+        *ngFor="let todo of todos(); trackBy: trackById"
+        class="todo"
+        [class.completed]="todo.completed"
+        [attr.data-id]="todo.id"
+      >
+        <label class="todo-left">
+          <input
+            class="t-toggle"
+            type="checkbox"
+            [checked]="todo.completed"
+            (change)="toggleCompletion(todo, $event)"
+          />
+          <ng-container *ngIf="!isEditing(todo); else editTitle">
+            <span class="t-title">{{ todo.title || '(Sin titulo)' }}</span>
+          </ng-container>
+        </label>
+
+        <div class="todo-right">
+          <button
+            *ngIf="!isEditing(todo); else saveButton"
+            class="icon-btn"
+            type="button"
+            (click)="startEdit(todo)"
+          >
+            Editar
+          </button>
+          <ng-template #saveButton>
+            <button class="icon-btn" type="button" (click)="confirmEdit(todo)">
+              Guardar
+            </button>
+            <button class="icon-btn subtle" type="button" (click)="cancelEdit()">
+              Cancelar
+            </button>
+          </ng-template>
+          <button class="icon-btn danger" type="button" (click)="remove(todo)">
+            Eliminar
+          </button>
+        </div>
+
+        <ng-template #editTitle>
+          <div class="edit-fields">
+            <input
+              class="inline"
+              [(ngModel)]="editForm.title"
+              name="editTitle{{ todo.id }}"
+              placeholder="Titulo"
+            />
+            <input
+              class="inline"
+              [(ngModel)]="editForm.description"
+              name="editDesc{{ todo.id }}"
+              placeholder="Descripcion"
+            />
+          </div>
+        </ng-template>
+
+        <p *ngIf="!isEditing(todo) && todo.description" class="t-desc">
+          {{ todo.description }}
+        </p>
+      </li>
+
+      <li *ngIf="!todos().length && !loading()" class="todo empty">
+        <span>No hay tareas registradas.</span>
+      </li>
+    </ul>
+  </section>
+</main>
